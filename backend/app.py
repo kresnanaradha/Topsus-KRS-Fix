@@ -47,6 +47,15 @@ def create_app():
     def health():
         return jsonify({"status": "ok"}), 200
 
+    @app.route("/api/db-test", methods=["GET"])
+    def db_test():
+        try:
+            from models import Admin
+            user = Admin.query.first()
+            return jsonify({"status": "ok", "admin_email": user.email if user else None}), 200
+        except Exception as e:
+            return jsonify({"status": "error", "detail": str(e)}), 500
+
     return app
 
 
